@@ -25,7 +25,7 @@ try:
     print("✅ WebDriver initialized successfully!")
 
     # Open the web page
-    TEST_URL = ""
+    TEST_URL = "https://github.com/AmanCreates/cicd.git"
     driver.get(TEST_URL)
     print(f"🔗 Opened URL: {TEST_URL}")
 
