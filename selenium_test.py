@@ -1,54 +1,24 @@
-
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 import time
-import os
 
-# Set the correct ChromeDriver path (Update if needed)
-CHROMEDRIVER_PATH = "/usr/local/bin/chromedriver"  # Use 'which chromedriver' to check path
-
-# Setup Chrome WebDriver
-service = Service(CHROMEDRIVER_PATH)
+# Start the WebDriver and open the HTML page
+service = Service(executable_path='/usr/local/bin/chromedriver')
 options = webdriver.ChromeOptions()
+options.add_argument("--headless")
+options.add_argument('--no-sandbox')
+driver = webdriver.Chrome(service=service, options=options)
+driver.get("https://amanshah20.github.io/SecondPipeLine/")  # Update this with the path to your HTML file
 
-# Add arguments for running in a CI/CD or headless environment
-options.add_argument("--headless")  # Remove this for debugging
-options.add_argument("--no-sandbox")
-options.add_argument("--disable-dev-shm-usage")
+time.sleep(2)  # Adding a delay to see the result
 
-# Initialize WebDriver
-try:
-    driver = webdriver.Chrome(service=service, options=options)
-    print("✅ WebDriver initialized successfully!")
+# Assert some condition to verify the result
+assert "Simple Form Validation" in driver.title
 
-    # Open the web page
-    TEST_URL = "https://github.com/AmanCreates/cicd.git"
-    driver.get(TEST_URL)
-    print(f"🔗 Opened URL: {TEST_URL}")
+# Take a screenshot
+timestamp = time.strftime("%Y%m%d-%H%M%S")
+screenshot_file = f"screenshot_{timestamp}.png"
+driver.save_screenshot(screenshot_file)
 
-    # Wait until the page title contains expected text
-    WebDriverWait(driver, 10).until(EC.title_contains("Simple Form Validation"))
-
-    # Print actual page title for debugging
-    actual_title = driver.title
-    print(f"📄 Page Title: {actual_title}")
-
-    # Assert condition
-    assert "Simple Form Validation" in actual_title, f"❌ Title mismatch: {actual_title}"
-
-    # Take a screenshot for verification
-    timestamp = time.strftime("%Y%m%d-%H%M%S")
-    screenshot_file = f"screenshot_{timestamp}.png"
-    driver.save_screenshot(screenshot_file)
-    print(f"📸 Screenshot saved: {screenshot_file}")
-
-except Exception as e:
-    print(f"🚨 Test failed: {str(e)}")
-
-finally:
-    # Ensure proper WebDriver closure
-    driver.quit()
-    print("✅ WebDriver closed successfully.")
+# Close the WebDriver
+driver.close()
