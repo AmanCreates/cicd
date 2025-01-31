@@ -16,7 +16,7 @@ driver = webdriver.Chrome(service=service, options=options)
 
 try:
     # Open the web page
-    driver.get("")  # Ensure this URL is correct
+    driver.get("https://github.com/AmanCreates/cicd.git")  # Ensure this URL is correct
 
     # Wait until the title contains the expected text (max wait: 10 seconds)
     WebDriverWait(driver, 10).until(EC.title_contains("Simple Form Validation"))
